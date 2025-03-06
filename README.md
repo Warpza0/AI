@@ -1,16 +1,16 @@
-# MNIST GUI Project
+# AI Project
 
-This project implements a graphical user interface (GUI) for training a neural network on the MNIST dataset using PyTorch. The application allows users to visualize the training process and check the accuracy of the model on the training data.
+This project is what i'm hoping to create a rival of chatgpt with, currently at a base stage with more work coming over the future.
 
 ## Project Structure
 
 ```
-mnist-gui-project
-├── src
-│   ├── main.py        # Entry point for the application
-│   ├── gui.py         # Implementation of the graphical user interface
-│   ├── train.py       # Training logic for the neural network
-│   └── utils.py       # Utility functions for data preprocessing and evaluation
+AI
+|
+├── main.py        # Entry point for the application
+├── gui.py         # Implementation of the graphical user interface
+├── train.py       # Training logic for the neural network
+|── utils.py       # Utility functions for data preprocessing and evaluation
 ├── requirements.txt    # List of dependencies
 └── README.md           # Project documentation
 ```
@@ -20,7 +20,7 @@ mnist-gui-project
 1. Clone the repository:
    ```
    git clone <repository-url>
-   cd mnist-gui-project
+   cd AI
    ```
 
 2. Install the required dependencies:
@@ -32,7 +32,7 @@ mnist-gui-project
 
 To run the application, execute the following command:
 ```
-python src/main.py
+python AI/main.py
 ```
 
 This will launch the GUI, where you can start training the neural network on the MNIST dataset. The interface will display the training loss over epochs and provide options to visualize the results.
