@@ -5,6 +5,7 @@ from torch.utils.data import DataLoader
 import torchvision.transforms as transforms
 import torchvision.datasets as datasets
 import matplotlib.pyplot as plt
+from PIL import Image
 
 class NeuralNet(nn.Module):
     def __init__(self, input_size, num_classes):
@@ -18,7 +19,7 @@ class NeuralNet(nn.Module):
         x = self.fc2(x)
         return x
 
-def train_model(num_epochs=5, batch_size=64, learning_rate=0.001):
+def train_model(device, num_epochs=5, batch_size=64, learning_rate=0.001):
     input_size = 28 * 28
     num_classes = 10
 
@@ -64,6 +65,44 @@ def train_model(num_epochs=5, batch_size=64, learning_rate=0.001):
 
     return model
 
+def compress_image(image_path, output_path, quality=20):
+    image = Image.open(image_path)
+    image.save(output_path, "JPEG", quality=quality)
+
+def load_image(image_path):
+    compressed_image_path = "compressed_image.jpg"
+    compress_image(image_path, compressed_image_path)
+
+    transform = transforms.Compose([
+        transforms.Resize((28, 28)),
+        transforms.ToTensor(),
+        transforms.Normalize((0.5,), (0.5,))
+    ])
+    image = Image.open(compressed_image_path).convert('L')
+    image = transform(image)
+    image = image.unsqueeze(0)  # Add batch dimension
+    return image
+
+def load_text_file(file_path):
+    with open(file_path, 'r') as file:
+        content = file.read()
+    return content
+
 if __name__ == "__main__":
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    train_model()
+    model = train_model(device)
+
+    # Example usage of load_image function
+    image_path = 'path_to_your_image.png'
+    image_tensor = load_image(image_path)
+    image_tensor = image_tensor.to(device)
+    model.eval()
+    with torch.no_grad():
+        output = model(image_tensor)
+        predicted_class = output.argmax(dim=1).item()
+        print(f'Predicted class: {predicted_class}')
+
+    # Example usage of load_text_file function
+    text_file_path = 'path_to_your_text_file.txt'
+    text_content = load_text_file(text_file_path)
+    print(f'Text file content: {text_content}')
