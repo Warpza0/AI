@@ -19,7 +19,7 @@ AI
 
 1. Clone the repository:
    ```
-   git clone <repository-url>
+   git clone <https://github.com/Warpza0/AI>
    cd AI
    ```
 
