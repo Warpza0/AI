@@ -1,34 +1,35 @@
-from tkinter import Tk, Label, Button, StringVar, Frame, filedialog
+from tkinter import Tk, Label, Button, StringVar, Frame, Entry, Text, Scrollbar, filedialog, END
 import torch
 from train import train_model, load_image, load_text_file  # Assuming train.py contains these functions
-
-torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 class MNISTApp:
     def __init__(self, master):
         self.master = master
-        master.title("MNIST Digit Classifier")
+        master.title("MNIST Digit Classifier & Chatbot")
 
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
         self.frame = Frame(master)
         self.frame.pack(padx=10, pady=10)
 
-        self.label = Label(self.frame, text="MNIST Digit Classifier", font=("Helvetica", 16))
+        self.label = Label(self.frame, text="ChatBot", font=("Helvetica", 16))
         self.label.pack()
 
         self.status = StringVar()
         self.status_label = Label(self.frame, textvariable=self.status, font=("Helvetica", 12))
         self.status_label.pack(pady=(10, 0))
 
-        self.train_button = Button(self.frame, text="Train Model", command=self.train_model)
-        self.train_button.pack(pady=(10, 0))
+        self.chat_label = Label(self.frame, text="Ask the AI a question:", font=("Helvetica", 12))
+        self.chat_label.pack(pady=(10, 0))
 
-        self.load_image_button = Button(self.frame, text="Load Image", command=self.load_image, state='disabled')
-        self.load_image_button.pack(pady=(10, 0))
+        self.chat_entry = Entry(self.frame, width=50)
+        self.chat_entry.pack(pady=(5, 0))
 
-        self.load_text_button = Button(self.frame, text="Load Text File", command=self.load_text_file)
-        self.load_text_button.pack(pady=(10, 0))
+        self.chat_button = Button(self.frame, text="Ask", command=self.ask_question)
+        self.chat_button.pack(pady=(5, 0))
+
+        self.chat_response = Text(self.frame, height=10, width=50, state='disabled', wrap='word')
+        self.chat_response.pack(pady=(10, 0))
 
         self.quit_button = Button(self.frame, text="Quit", command=master.quit)
         self.quit_button.pack(pady=(10, 0))
@@ -76,6 +77,34 @@ class MNISTApp:
 
         text_content = load_text_file(file_path)
         self.status.set(f"Text file content: {text_content[:100]}...")  # Display first 100 characters
+
+    def ask_question(self):
+        question = self.chat_entry.get()
+        if not question.strip():
+            return
+
+        # Basic rule-based AI logic for a support bot
+        if "vpn" in question.lower():
+            response = "What issues are you having? pick from this common list." \
+            "\n1. Unable to connect to VPN" \
+            "\n2. VPN connection is slow" \
+            "\n3. VPN connection keeps dropping" \
+            "\n4. Unable to access internal network"
+        elif "load image" in question.lower():
+            response = "To load an image, click the 'Load Image' button after training the model."
+        elif "load text" in question.lower():
+            response = "To load a text file, click the 'Load Text File' button and select a .txt file."
+        elif "quit" in question.lower():
+            response = "To quit the application, click the 'Quit' button."
+        else:
+            response = "I'm sorry, I don't understand your question. Please try asking something else."
+
+        # Display the response in the chat response box
+        self.chat_response.config(state='normal')
+        self.chat_response.insert(END, f"User: {question}\n")
+        self.chat_response.insert(END, f"AI: {response}\n\n")
+        self.chat_response.config(state='disabled')
+        self.chat_entry.delete(0, END)
 
 if __name__ == "__main__":
     root = Tk()
