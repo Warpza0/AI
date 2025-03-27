@@ -5,7 +5,7 @@ from train import train_model, load_image, load_text_file  # Assuming train.py c
 class MNISTApp:
     def __init__(self, master):
         self.master = master
-        master.title("MNIST Digit Classifier & Chatbot")
+        master.title("Chatbot")
 
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
@@ -19,7 +19,7 @@ class MNISTApp:
         self.status_label = Label(self.frame, textvariable=self.status, font=("Helvetica", 12))
         self.status_label.pack(pady=(10, 0))
 
-        self.chat_label = Label(self.frame, text="Ask the AI a question:", font=("Helvetica", 12))
+        self.chat_label = Label(self.frame, text="Ask Marianna a question:", font=("Helvetica", 12))
         self.chat_label.pack(pady=(10, 0))
 
         self.chat_entry = Entry(self.frame, width=50)
@@ -90,9 +90,17 @@ class MNISTApp:
             "\n2. VPN connection is slow" \
             "\n3. VPN connection keeps dropping" \
             "\n4. Unable to access internal network"
-        elif "load image" in question.lower():
-            response = "To load an image, click the 'Load Image' button after training the model."
-        elif "load text" in question.lower():
+        elif "1" in question.lower():
+            response = "please see the help guide provided by marianna." 
+        elif "2" in question.lower():
+            response = "check your home network and internet settings, disconnecting and reconnecting may help."
+        elif "3" in question.lower():
+            response = "this will be due to your home internet, please try resetting your router or restarting your laptop."
+        elif "4" in question.lower():
+            response = "please contact bluesys for assistance, they manage the network."
+        elif "laptop locked" in question.lower():
+            response = "If your laptop account is locked, please contact Bluesys for help."
+        elif "no" in question.lower():
             response = "To load a text file, click the 'Load Text File' button and select a .txt file."
         elif "quit" in question.lower():
             response = "To quit the application, click the 'Quit' button."
